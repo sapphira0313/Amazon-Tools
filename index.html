@@ -3,107 +3,76 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>工具箱：标题转换 + 计算器</title>
+<title>工具箱</title>
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        background-color: #f7f7f7;
-    }
-    .tab-container {
-        display: flex;
-        background-color: #333;
-    }
-    .tab {
-        flex: 1;
-        text-align: center;
-        padding: 15px;
-        color: white;
-        cursor: pointer;
-        font-size: 18px;
-        transition: background-color 0.3s;
-    }
-    .tab:hover {
-        background-color: #555;
-    }
-    .tab.active {
-        background-color: #007bff;
-    }
-    .content {
-        display: none;
-        padding: 20px;
-    }
-    .content.active {
-        display: block;
-    }
+/* --- 全局样式 --- */
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #f4f6f8; }
+.tab-container { display: flex; background-color: #2c3e50; }
+.tab { flex: 1; text-align: center; padding: 15px; color: white; cursor: pointer; font-size: 18px; transition: background-color 0.3s; }
+.tab:hover { background-color: #34495e; }
+.tab.active { background-color: #2980b9; font-weight: bold; }
+.content { display: none; padding: 20px; animation: fadeIn 0.3s; }
+.content.active { display: block; }
+@keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
 
-    /* 标题转换工具样式 */
-    textarea {
-        width: 100%;
-        height: 150px;
-        padding: 10px;
-        font-size: 16px;
-        resize: none;
-        margin-bottom: 20px;
-    }
-    button {
-        margin: 5px 10px;
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-    }
-    #output {
-        width: 100%;
-        min-height: 150px;
-        padding: 10px;
-        font-size: 16px;
-        background-color: #fff;
-        border: 1px solid #ccc;
-        overflow-y: auto;
-        white-space: pre-wrap;
-        margin-top: 20px;
-    }
+/* --- 标题转换 --- */
+textarea, #output { width: 100%; padding: 15px; font-size: 16px; border-radius: 8px; border: 1px solid #ccc; resize: none; background-color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+button { margin: 5px 8px; padding: 12px 20px; font-size: 16px; cursor: pointer; border: none; border-radius: 6px; transition: 0.2s; }
+button:hover { opacity: 0.9; }
+#output { min-height: 150px; white-space: pre-wrap; }
+.convert-btn { background-color: #3498db; color: #fff; }
+.bold-btn { background-color: #9b59b6; color: #fff; }
+.copy-btn { background-color: #2ecc71; color: #fff; }
 
-    /* 计算器样式 */
-    .calculator {
-        max-width: 400px;
-        margin: 0 auto;
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0px 0px 10px #ccc;
-    }
-    .display {
-        width: 100%;
-        height: 50px;
-        font-size: 24px;
-        text-align: right;
-        padding: 5px 10px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-    .buttons {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 10px;
-    }
-    .buttons button {
-        padding: 15px;
-        font-size: 18px;
-        cursor: pointer;
-        border: none;
-        border-radius: 5px;
-        background-color: #e0e0e0;
-        transition: background-color 0.2s;
-    }
-    .buttons button:hover { background-color: #d0d0d0; }
-    .operator { background-color: #ff9500; color: #fff; }
-    .operator:hover { background-color: #e08a00; }
-    .equal { background-color: #34c759; color: #fff; grid-column: span 2; }
-    .equal:hover { background-color: #28a745; }
-    .clear { background-color: #ff3b30; color: #fff; }
-    .clear:hover { background-color: #e03127; }
+/* --- 计算器 --- */
+.calculator { max-width: 400px; margin: 20px auto; background-color: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.display { width: 100%; height: 50px; font-size: 24px; text-align: right; padding: 5px 10px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ccc; }
+.buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+
+/* 按钮美化 */
+.buttons button {
+    padding: 15px;
+    font-size: 20px;
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    transition: 0.2s;
+    color: #333;
+    background-color: #ecf0f1;
+}
+.buttons button:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.2); }
+.operator {
+    background-color: #e67e22; /* 橙色 */
+    color: #fff; /* 白色文字 */
+}
+.operator:hover { background-color: #d35400; }
+.equal {
+    background-color: #27ae60; /* 绿色 */
+    color: #fff;
+    grid-column: span 2;
+}
+.equal:hover { background-color: #1e8449; }
+.clear {
+    background-color: #c0392b; /* 红色 */
+    color: #fff;
+}
+.clear:hover { background-color: #922b21; }
+/* 数字按钮 */
+.buttons button:not(.operator):not(.equal):not(.clear) {
+    background-color: #bdc3c7; /* 浅灰 */
+    color: #2c3e50;
+}
+.buttons button:not(.operator):not(.equal):not(.clear):hover {
+    background-color: #95a5a6;
+}
+
+/* --- 亚马逊站点 --- */
+#searchInput { width: 100%; padding: 12px; font-size: 16px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ccc; }
+#siteContainer { display: flex; flex-wrap: wrap; gap: 15px; }
+.site-card { cursor:pointer; display:flex; align-items:center; padding:10px 15px; background:#fff; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.05); transition:0.2s; }
+.site-card:hover { box-shadow:0 6px 16px rgba(0,0,0,0.15); }
+.site-card img { width:24px; height:16px; margin-right:8px; }
+@media (max-width: 500px){ .buttons { grid-template-columns: repeat(3, 1fr); } }
 </style>
 </head>
 <body>
@@ -111,19 +80,20 @@
 <div class="tab-container">
     <div class="tab active" onclick="switchTab('titleTab')">标题转换工具</div>
     <div class="tab" onclick="switchTab('calcTab')">计算器</div>
+    <div class="tab" onclick="switchTab('amazonTab')">亚马逊站点</div>
 </div>
 
-<!-- 标题转换工具 -->
+<!-- 标题转换 -->
 <div id="titleTab" class="content active">
-    <textarea id="inputText" placeholder="在这里输入或粘贴标题..."></textarea>
+    <textarea id="inputText" placeholder="输入或粘贴标题..."></textarea>
     <div>
-        <button onclick="convert('amazon')">亚马逊风格</button>
-        <button onclick="convert('uppercase')">全大写</button>
-        <button onclick="convert('lowercase')">全小写</button>
-        <button onclick="boldText()">加粗</button>
+        <button class="convert-btn" onclick="convert('amazon')">亚马逊风格</button>
+        <button class="convert-btn" onclick="convert('uppercase')">全大写</button>
+        <button class="convert-btn" onclick="convert('lowercase')">全小写</button>
+        <button class="bold-btn" onclick="boldText()">加粗</button>
     </div>
-    <div id="output" placeholder="转换后的标题会显示在这里..."></div>
-    <button onclick="copyToClipboard()">复制到剪贴板</button>
+    <div id="output"></div>
+    <button class="copy-btn" onclick="copyToClipboard()">复制到剪贴板</button>
 </div>
 
 <!-- 计算器 -->
@@ -156,48 +126,73 @@
     </div>
 </div>
 
+<!-- 亚马逊站点 -->
+<div id="amazonTab" class="content">
+    <h2>亚马逊主流站点</h2>
+    <input type="text" id="searchInput" placeholder="搜索站点名称..." onkeyup="filterSites()">
+    <div id="siteContainer">
+        <div class="site-card" onclick="openSiteAndCopyPostcode('https://www.amazon.com','02139')">
+            <img src="https://flagcdn.com/us.svg" alt="US"><span>Amazon US</span>
+        </div>
+        <div class="site-card" onclick="openSiteAndCopyPostcode('https://www.amazon.co.uk','OX1 2JD')">
+            <img src="https://flagcdn.com/gb.svg" alt="UK"><span>Amazon UK</span>
+        </div>
+        <div class="site-card" onclick="openSiteAndCopyPostcode('https://www.amazon.de','80333')">
+            <img src="https://flagcdn.com/de.svg" alt="DE"><span>Amazon Germany</span>
+        </div>
+        <div class="site-card" onclick="openSiteAndCopyPostcode('https://www.amazon.fr','75005')">
+            <img src="https://flagcdn.com/fr.svg" alt="FR"><span>Amazon France</span>
+        </div>
+        <div class="site-card" onclick="openSiteAndCopyPostcode('https://www.amazon.ca','M5S 3G8')">
+            <img src="https://flagcdn.com/ca.svg" alt="CA"><span>Amazon Canada</span>
+        </div>
+        <div class="site-card" onclick="openSiteAndCopyPostcode('https://www.amazon.co.jp','113-8654')">
+            <img src="https://flagcdn.com/jp.svg" alt="JP"><span>Amazon Japan</span>
+        </div>
+        <div class="site-card" onclick="openSiteAndCopyPostcode('https://www.amazon.in','110016')">
+            <img src="https://flagcdn.com/in.svg" alt="IN"><span>Amazon India</span>
+        </div>
+    </div>
+</div>
+
 <script>
-/* --- 切换标签 --- */
-function switchTab(tabId) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+// --- 标签切换 ---
+function switchTab(tabId){
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.content').forEach(c=>c.classList.remove('active'));
     document.getElementById(tabId).classList.add('active');
-    if(tabId === 'titleTab') document.querySelector('.tab-container .tab:first-child').classList.add('active');
+    if(tabId==='titleTab') document.querySelector('.tab-container .tab:first-child').classList.add('active');
+    else if(tabId==='calcTab') document.querySelector('.tab-container .tab:nth-child(2)').classList.add('active');
     else document.querySelector('.tab-container .tab:last-child').classList.add('active');
 }
 
-/* --- 标题转换工具 --- */
-const smallWords = ['and', 'or', 'for', 'of', 'in', 'on', 'with', 'the', 'a', 'an', 'to', 'at', 'by'];
-
-function convertAmazonStyle(text) {
-    const words = text.trim().split(/\s+/);
-    return words.map((word, index) => {
-        if (/^[0-9]/.test(word) || /^[^a-zA-Z]/.test(word) || word === word.toUpperCase()) return word;
-        const lowerWord = word.toLowerCase();
-        if (index === 0 || !smallWords.includes(lowerWord)) return word[0].toUpperCase() + word.slice(1).toLowerCase();
-        else return lowerWord;
+// --- 标题转换 ---
+const smallWords=['and','or','for','of','in','on','with','the','a','an','to','at','by'];
+function convertAmazonStyle(text){
+    const words=text.trim().split(/\s+/);
+    return words.map((word,index)=>{
+        if(/^[0-9]/.test(word)||/^[^a-zA-Z]/.test(word)||word===word.toUpperCase()) return word;
+        const lower=word.toLowerCase();
+        if(index===0||!smallWords.includes(lower)) return word[0].toUpperCase()+word.slice(1).toLowerCase();
+        else return lower;
     }).join(' ');
 }
-
-function convert(style) {
-    const input = document.getElementById("inputText").value;
-    let output = "";
-    if (style === "amazon") output = convertAmazonStyle(input);
-    else if (style === "uppercase") output = input.toUpperCase();
-    else if (style === "lowercase") output = input.toLowerCase();
-    document.getElementById("output").textContent = output;
+function convert(style){
+    const input=document.getElementById("inputText").value;
+    let output="";
+    if(style==="amazon") output=convertAmazonStyle(input);
+    else if(style==="uppercase") output=input.toUpperCase();
+    else if(style==="lowercase") output=input.toLowerCase();
+    document.getElementById("output").textContent=output;
 }
-
-function boldText() {
-    const outputEl = document.getElementById("output");
-    const text = outputEl.textContent.trim();
-    if (!text) { alert("请先转换格式后再加粗！"); return; }
-    outputEl.textContent = convertToUnicodeBold(text);
+function boldText(){
+    const outputEl=document.getElementById("output");
+    const text=outputEl.textContent.trim();
+    if(!text){ alert("请先转换格式后再加粗！"); return; }
+    outputEl.textContent=convertToUnicodeBold(text);
 }
-
-function convertToUnicodeBold(text) {
-    const boldMap = {
-        'a':'𝗮','b':'𝗯','c':'𝗰','d':'𝗱','e':'𝗲','f':'𝗳','g':'𝗴','h':'𝗵','i':'𝗶','j':'𝗷',
+function convertToUnicodeBold(text){
+    const boldMap={ 'a':'𝗮','b':'𝗯','c':'𝗰','d':'𝗱','e':'𝗲','f':'𝗳','g':'𝗴','h':'𝗵','i':'𝗶','j':'𝗷',
         'k':'𝗸','l':'𝗹','m':'𝗺','n':'𝗻','o':'𝗼','p':'𝗽','q':'𝗾','r':'𝗿','s':'𝘀','t':'𝘁',
         'u':'𝘂','v':'𝘃','w':'𝘄','x':'𝘅','y':'𝘆','z':'𝘇',
         'A':'𝗔','B':'𝗕','C':'𝗖','D':'𝗗','E':'𝗘','F':'𝗙','G':'𝗚','H':'𝗛','I':'𝗜','J':'𝗝',
@@ -205,47 +200,50 @@ function convertToUnicodeBold(text) {
         'U':'𝗨','V':'𝗩','W':'𝗪','X':'𝗫','Y':'𝗬','Z':'𝗭',
         '0':'𝟬','1':'𝟭','2':'𝟮','3':'𝟯','4':'𝟰','5':'𝟱','6':'𝟲','7':'𝟳','8':'𝟴','9':'𝟵'
     };
-    return text.split('').map(c => boldMap[c] || c).join('');
+    return text.split('').map(c=>boldMap[c]||c).join('');
+}
+function copyToClipboard(){
+    const outputText=document.getElementById("output").textContent;
+    if(!outputText){ alert("没有内容可以复制！"); return; }
+    navigator.clipboard.writeText(outputText).then(()=>{alert("标题已复制到剪贴板！");})
+    .catch(()=>{alert("复制失败，请手动复制。");});
 }
 
-function copyToClipboard() {
-    const outputText = document.getElementById("output").textContent;
-    if (!outputText) { alert("没有内容可以复制！"); return; }
-    navigator.clipboard.writeText(outputText).then(() => { alert("标题已复制到剪贴板！"); })
-    .catch(() => { alert("复制失败，请手动复制。"); });
-}
-
-/* --- 计算器 --- */
-let display = document.getElementById('display');
-let expression = '';
-
-function appendNumber(num) { expression += num; display.value = expression; }
-function appendDot() {
-    if (!expression || /[^\d]\.$/.test(expression)) expression += '0.';
-    else {
-        const lastNumber = expression.split(/[\+\-\*\/]/).pop();
-        if (!lastNumber.includes('.')) expression += '.';
-    }
-    display.value = expression;
-}
-function appendOperator(op) { if (expression && !/[+\-*/]$/.test(expression)) { expression += op; display.value = expression; } }
-function calculate() {
-    if (!expression) return;
-    try { display.value = eval(expression); expression = display.value; } 
-    catch(e) { display.value = '错误'; expression = ''; }
-}
-function clearDisplay() { expression = ''; display.value = ''; }
-
-// 监听键盘输入
-document.addEventListener('keydown', function(e) {
-    const key = e.key;
-    if (key >= '0' && key <= '9') appendNumber(key);
-    else if (key === '.') appendDot();
-    else if (['+', '-', '*', '/'].includes(key)) appendOperator(key);
-    else if (key === 'Enter') calculate();
-    else if (key === 'Backspace') { expression = expression.slice(0, -1); display.value = expression; }
-    else if (key.toLowerCase() === 'c') clearDisplay();
+// --- 计算器 ---
+let display=document.getElementById('display');
+let expression='';
+function appendNumber(num){ expression+=num; display.value=expression; }
+function appendDot(){ if(!expression||/[^\d]\.$/.test(expression)) expression+='0.'; else { const last=expression.split(/[\+\-\*\/]/).pop(); if(!last.includes('.')) expression+='.'; } display.value=expression; }
+function appendOperator(op){ if(expression&&!/[+\-*/]$/.test(expression)){ expression+=op; display.value=expression; } }
+function calculate(){ if(!expression) return; try{ display.value=eval(expression); expression=display.value; } catch(e){ display.value='错误'; expression=''; } }
+function clearDisplay(){ expression=''; display.value=''; }
+document.addEventListener('keydown',function(e){
+    const key=e.key;
+    if(key>='0'&&key<='9') appendNumber(key);
+    else if(key=='.') appendDot();
+    else if(['+','-','*','/'].includes(key)) appendOperator(key);
+    else if(key=='Enter') calculate();
+    else if(key=='Backspace'){ expression=expression.slice(0,-1); display.value=expression; }
+    else if(key.toLowerCase()=='c') clearDisplay();
 });
+
+// --- 亚马逊站点搜索 ---
+function filterSites(){
+    const filter=document.getElementById("searchInput").value.toUpperCase();
+    const cards=document.querySelectorAll("#siteContainer .site-card");
+    cards.forEach(card=>{
+        const text=card.querySelector("span").textContent.toUpperCase();
+        card.style.display=text.indexOf(filter)>-1?"flex":"none";
+    });
+}
+function openSiteAndCopyPostcode(url, postcode){
+    window.open(url,'_blank');
+    navigator.clipboard.writeText(postcode).then(()=>{
+        alert("已打开网站："+url+"\n邮编已复制："+postcode);
+    }).catch(()=>{
+        alert("已打开网站："+url+"\n复制邮编失败，请手动复制："+postcode);
+    });
+}
 </script>
 
 </body>
